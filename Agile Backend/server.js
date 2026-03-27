@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors'); // ✅ Import CORS
 const connectDB = require('./config/db');
 const siteVisitRoutes = require('./routes/siteVisits');
+const adminDashboardRoutes = require('./models/adminDashboard.model');
 const asyncHandler = require('express-async-handler');
 
 // Load environment variables
@@ -11,8 +12,9 @@ dotenv.config();
 // Initialize express app
 const app = express();
 
-// ✅ Enable CORS for all origins (or specify allowed origins)
-app.use(cors()); 
+// ✅ Middleware
+app.use(cors());
+app.use(express.json());
 // Or for specific origin only:
 // app.use(cors({ origin: 'http://localhost:3000' }));
 
@@ -22,7 +24,10 @@ connectDB();
 // Middleware
 app.use(express.json());
 
-// Routes
+// ✅ Routes
+const adminRoutes = require("./routes/adminDashboard.router");
+app.use("/api/admin", adminRoutes);
+
 app.use('/api/sitevisits', siteVisitRoutes);
 
 // Error handling middleware
